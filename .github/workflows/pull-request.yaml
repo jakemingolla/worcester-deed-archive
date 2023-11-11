@@ -32,4 +32,4 @@ jobs:
           key: ${{ hashFiles('.nvmrc', 'bun.lockb') }}
       - run: bun install
         if: steps.cache.outputs.cache-hit != 'true'
-      - run: bun test
+      - run: bun run test
