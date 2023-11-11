@@ -1,0 +1,10 @@
+.*/
+**/__generated__/**
+package-lock.json
+dist/
+**/dist/**
+build/
+logs/
+postgres-data/
+**/tsconfig.json
+coverage/
