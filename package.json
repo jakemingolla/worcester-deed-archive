@@ -7,6 +7,9 @@
     "typescript": "^5.2.2",
     "winston": "^3.11.0"
   },
+  "trustedDependencies": [
+    "puppeteer"
+  ],
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
@@ -16,6 +19,8 @@
     "prettier": "^3.0.3"
   },
   "scripts": {
+    "postinstall": "bunx @puppeteer/browsers install chrome@stable --path $HOME/.cache/puppeteer",
+    "postinstall-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
     "start": "bun run src/index.ts",
     "test": "bun run lint && bun run test:unit",
     "test:unit": "bun test",
