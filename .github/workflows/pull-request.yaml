@@ -33,3 +33,4 @@ jobs:
       - run: bun install
         if: steps.cache.outputs.cache-hit != 'true'
       - run: bun run test
+      - run: bun run src/index.ts
