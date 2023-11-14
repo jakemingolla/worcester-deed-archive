@@ -20,8 +20,10 @@
     "prettier": "^3.0.3"
   },
   "scripts": {
-    "postinstall": "bunx @puppeteer/browsers install chrome@stable --path $HOME/.cache/puppeteer",
-    "postinstall-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
+    "postinstall": "bun run postinstall1 && bun run postinstall2",
+    "postinstall1": "bunx @puppeteer/browsers install chrome@stable --path $HOME/.cache/puppeteer",
+    "postinstall1-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
+    "postinstall2": "mkdir ./screenshots",
     "start": "bun run src/index.ts",
     "test": "bun run lint && bun run test:unit && bun run test:integration",
     "test:unit": "bun test -- test/unit",

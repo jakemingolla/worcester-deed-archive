@@ -111,7 +111,6 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
     console.log(output);
     return output;
   } catch (err) {
-    log.error((err as Error).stack);
     await screenshot.record(page, "error-received");
     throw err;
   } finally {
