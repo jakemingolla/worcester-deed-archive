@@ -3,6 +3,7 @@
   "module": "src/index.ts",
   "dependencies": {
     "csv-stringify": "^6.4.4",
+    "dayjs": "^1.11.10",
     "puppeteer": "^21.5.1",
     "typescript": "^5.2.2",
     "winston": "^3.11.0"
@@ -22,8 +23,9 @@
     "postinstall": "bunx @puppeteer/browsers install chrome@stable --path $HOME/.cache/puppeteer",
     "postinstall-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
     "start": "bun run src/index.ts",
-    "test": "bun run lint && bun run test:unit",
-    "test:unit": "bun test",
+    "test": "bun run lint && bun run test:unit && bun run test:integration",
+    "test:unit": "bun test -- test/unit",
+    "test:integration": "bun test -- test/integration --timeout 60000",
     "lint": "bun run typescript:check && bun run eslint:check && bun run prettier:check",
     "typescript:check": "tsc --noEmit",
     "eslint:check": "eslint . --max-warnings 0 --ext .ts",
