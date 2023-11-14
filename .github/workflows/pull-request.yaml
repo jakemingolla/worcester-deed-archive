@@ -34,3 +34,9 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
       - run: bun run test
       - run: bun run src/index.ts
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Screenshots
+          path: ./screenshots
+          retention-days: 3
