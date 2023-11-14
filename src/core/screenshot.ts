@@ -29,3 +29,5 @@ export class Screenshot {
     this.count += 1;
   }
 }
+
+export const screenshot = new Screenshot();
