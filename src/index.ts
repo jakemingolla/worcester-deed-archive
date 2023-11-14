@@ -1,8 +1,11 @@
 import { stringify } from "csv-stringify/sync";
 import dayjs, { type Dayjs } from "dayjs";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
-import { log, screenshot } from "./core/index.ts";
+import { Core, log, screenshot } from "./core/index.ts";
+
+puppeteer.use(StealthPlugin());
 
 // TODO
 const __doPostBack = (...args: string[]) => {
@@ -15,12 +18,12 @@ type HTMLInputElement = {
   innerText: string;
 };
 
-const USER_AGENT =
-  "Mozilla/5.0 (compatible; " +
-  "worcester-deed-archive/1.0; " +
-  "https://github.com/jakemingolla/worcester-deed-archive)";
-
-export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
+export const main = async (
+  core: Core,
+  start: Dayjs,
+  end: Dayjs,
+): Promise<string> => {
+  const { log, screenshot } = core;
   log.info(`Beginning run from ${start.format()} -> ${end.format()}.`);
 
   const browser = await puppeteer.launch({
@@ -29,7 +32,6 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
   });
 
   const page = await browser.newPage();
-  await page.setUserAgent(USER_AGENT);
   await page.setViewport({ width: 1080, height: 1024 });
   try {
     await page.goto("https://www.masslandrecords.com/worcester/");
@@ -121,7 +123,7 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 if (import.meta.main) {
   const start = dayjs("2023-01-01");
   const end = dayjs("2023-10-31");
-  main(start, end)
+  main({ log, screenshot }, start, end)
     .then(() => process.exit(0))
     .catch((err) => {
       log.error((err as Error).stack);

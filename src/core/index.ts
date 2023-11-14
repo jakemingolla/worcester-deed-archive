@@ -1,5 +1,11 @@
+import { Logger } from "winston";
+
 import { Screenshot } from "./screenshot";
 
 export * from "./log";
+export * from "./screenshot";
 
-export const screenshot = new Screenshot();
+export type Core = {
+  log: Logger;
+  screenshot: Screenshot;
+};
