@@ -1,11 +1,8 @@
 import { stringify } from "csv-stringify/sync";
 import dayjs, { type Dayjs } from "dayjs";
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
 import { Core, log, screenshot } from "./core/index.ts";
-
-puppeteer.use(StealthPlugin());
+import { init } from "./steps/init.ts";
 
 // TODO
 const __doPostBack = (...args: string[]) => {
@@ -26,13 +23,8 @@ export const main = async (
   const { log, screenshot } = core;
   log.info(`Beginning run from ${start.format()} -> ${end.format()}.`);
 
-  const browser = await puppeteer.launch({
-    timeout: 5 * 1000,
-    headless: "new",
-  });
+  const { browser, page } = await init(core, 1);
 
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1080, height: 1024 });
   try {
     await page.goto("https://www.masslandrecords.com/worcester/");
     await page.waitForFunction(() => typeof __doPostBack !== "undefined");

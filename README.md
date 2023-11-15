@@ -16,7 +16,7 @@ This project was created using `bun init` in bun v1.0.11. [Bun](https://bun.sh) 
 
 Roadmap
 
-- [ ] delete screenshots on startup
-  - also init folder and remove GHA step and postinstall
+- [ ] transition to jest
+  - mockCore change
 - [ ] retries
 - [ ] change to 'real' deeds
