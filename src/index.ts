@@ -1,11 +1,11 @@
 import { stringify } from "csv-stringify/sync";
 import dayjs, { type Dayjs } from "dayjs";
 
-import { Core, log, screenshot } from "./core/index.ts";
+import { log, screenshot } from "./core/index.ts";
 import { init } from "./steps/init.ts";
 
 // TODO
-const __doPostBack = (...args: string[]) => {
+const __doPostBack = (...args: string[]): void => {
   void args;
 };
 
@@ -15,15 +15,10 @@ type HTMLInputElement = {
   innerText: string;
 };
 
-export const main = async (
-  core: Core,
-  start: Dayjs,
-  end: Dayjs,
-): Promise<string> => {
-  const { log, screenshot } = core;
+export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
   log.info(`Beginning run from ${start.format()} -> ${end.format()}.`);
 
-  const { browser, page } = await init(core, 1);
+  const { browser, page } = await init(1);
 
   try {
     await page.goto("https://www.masslandrecords.com/worcester/");
@@ -102,7 +97,6 @@ export const main = async (
     }
 
     const output = stringify(headers.concat(data));
-    console.log(output);
     return output;
   } catch (err) {
     await screenshot.record(page, "error-received");
@@ -115,8 +109,11 @@ export const main = async (
 if (import.meta.main) {
   const start = dayjs("2023-01-01");
   const end = dayjs("2023-10-31");
-  main({ log, screenshot }, start, end)
-    .then(() => process.exit(0))
+  main(start, end)
+    .then((output) => {
+      console.log(output);
+      process.exit(0);
+    })
     .catch((err) => {
       log.error((err as Error).stack);
       return process.exit(1);
