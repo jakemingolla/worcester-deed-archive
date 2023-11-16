@@ -5,7 +5,7 @@ import { Core, log, screenshot } from "./core/index.ts";
 import { init } from "./steps/init.ts";
 
 // TODO
-const __doPostBack = (...args: string[]) => {
+const __doPostBack = (...args: string[]): void => {
   void args;
 };
 
