@@ -8,6 +8,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:jest/recommended",
     "prettier" // this MUST be last in the array
   ],
   "parser": "@typescript-eslint/parser",
@@ -16,7 +17,7 @@
     "sourceType": "module",
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "jest"],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "error"
   }

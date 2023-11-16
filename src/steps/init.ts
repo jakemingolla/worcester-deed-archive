@@ -5,16 +5,13 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { rimraf } from "rimraf";
 
-import { Core } from "../core";
+import { log } from "../core";
 
 puppeteer.use(StealthPlugin());
 
 export const init = async (
-  core: Core,
   attempt: number,
 ): Promise<{ page: Page; browser: Browser }> => {
-  const { log } = core;
-
   try {
     log.debug("Attempting to reset the ./screenshots directory.");
     await access("./screenshots");
@@ -23,6 +20,7 @@ export const init = async (
       await rimraf(path.join("./screenshots", "*.png"), { glob: true });
     }
   } catch (err) {
+    log.error(err);
     log.debug("Creating a brand new ./screenshots directory.");
     await mkdir("./screenshots");
   }

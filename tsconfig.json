@@ -15,7 +15,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "types": ["bun-types"],
+    "types": ["bun-types", "jest"],
+    "esModuleInterop": true,
     "paths": {
       "csv-stringify": ["../node_modules/csv-stringify/lib/index.js"]
     }

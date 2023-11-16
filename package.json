@@ -16,11 +16,14 @@
   ],
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/jest": "^29.5.8",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "bun-types": "latest",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
-    "prettier": "^3.0.3"
+    "eslint-plugin-jest": "^27.6.0",
+    "prettier": "^3.0.3",
+    "ts-jest-mock-import-meta": "^1.1.0"
   },
   "scripts": {
     "postinstall": "bun run postinstall1 && bun run postinstall2",
@@ -29,8 +32,8 @@
     "postinstall2": "mkdir -p ./screenshots",
     "start": "bun run src/index.ts",
     "test": "bun run lint && bun run test:unit && bun run test:integration",
-    "test:unit": "bun test -- test/unit",
-    "test:integration": "bun test --timeout 60000 -- test/integration ",
+    "test:unit": "jest",
+    "test:integration": "bun test --timeout 60000 -- test/integration",
     "lint": "bun run typescript:check && bun run eslint:check && bun run prettier:check",
     "typescript:check": "tsc --noEmit",
     "eslint:check": "eslint . --max-warnings 0 --ext .ts",
