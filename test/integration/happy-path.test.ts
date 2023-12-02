@@ -4,13 +4,27 @@ import dayjs from "dayjs";
 
 describe("happy path tests", () => {
   it("the results from 2023-01-01 -> 2023-02-01 are found", async () => {
-    const start = dayjs("2023-01-01");
-    const end = dayjs("2023-02-01");
+    const start = dayjs("1961-01-06");
+    const end = dayjs("1961-01-07");
     const output = await main(start, end);
-    const expected =
-      "Doc #,File Date,Rec Time,Type Desc.,Bk/Pg,Consideration,Court Case #,Doc. Status\n" +
-      "18527,01/19/2023,08:46:19.602,PLANS,00093/127,\xa0,0000019658,In workflow\n";
+    expect(output).toMatchSnapshot();
+  });
 
-    expect(output).toBe(expected);
+  it("throws an error if too many results", () => {
+    const start = dayjs("2023-01-01");
+    const end = dayjs("2023-01-31");
+
+    expect(async () => await main(start, end)).toThrow(
+      "Too many results received. Use a more narrow time range.",
+    );
+  });
+
+  it("throws an error if too few results", () => {
+    const start = dayjs("2023-01-01");
+    const end = dayjs("2023-01-01");
+
+    expect(async () => await main(start, end)).toThrow(
+      "Too few results received. Use a broader time range.",
+    );
   });
 });

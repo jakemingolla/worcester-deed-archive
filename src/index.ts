@@ -2,18 +2,9 @@ import { stringify } from "csv-stringify/sync";
 import dayjs, { type Dayjs } from "dayjs";
 
 import { log, screenshot } from "./core/index.ts";
+import { countResults } from "./steps/count-results.ts";
 import { init } from "./steps/init.ts";
-
-// TODO
-const __doPostBack = (...args: string[]): void => {
-  void args;
-};
-
-// TODO
-type HTMLInputElement = {
-  value: string;
-  innerText: string;
-};
+import { setSearchCriteria } from "./steps/set-search-criteria.ts";
 
 export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
   log.info(`Beginning run from ${start.format()} -> ${end.format()}.`);
@@ -22,68 +13,40 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 
   try {
     await page.goto("https://www.masslandrecords.com/worcester/");
+
     await page.waitForFunction(() => typeof __doPostBack !== "undefined");
     await screenshot.record(page, "after-do-post-back");
-    await page.evaluate(() => {
-      __doPostBack("Navigator1$SearchCriteria1$LinkButton35", "");
-    });
-    await page.waitForSelector("#SearchFormEx1_ACSTextBox_DateFrom");
-    await page.$eval(
-      "#SearchFormEx1_ACSTextBox_DateFrom",
-      (el: HTMLInputElement, formattedStart) => (el.value = formattedStart),
-      start.format("MM/DD/YYYY"),
-    );
-    await page.waitForSelector("#SearchFormEx1_ACSTextBox_DateTo");
-    await page.$eval(
-      "#SearchFormEx1_ACSTextBox_DateTo",
-      (el: HTMLInputElement, formattedEnd) => (el.value = formattedEnd),
-      end.format("MM/DD/YYYY"),
-    );
 
-    await screenshot.record(page, "after-dates-entered");
+    await setSearchCriteria(page, start, end);
+    await screenshot.record(page, "after-search-criteria");
     await page.click("#SearchFormEx1_btnSearch");
 
-    await Bun.sleep(1000);
-    await screenshot.record(page, "after-search-clicked");
+    const count = await countResults(page);
+    await screenshot.record(page, "after-count");
+    log.info(`Successfully found ${count} results.`);
 
-    const errorReceived = await page.$("#MessageBoxCtrl1_ErrorLabel1");
-    if (errorReceived) {
-      const message = await errorReceived.evaluate(
-        (el: HTMLInputElement) => el.innerText,
-      );
-      throw new Error(message);
-    }
-
-    const rowCountEl = await page.$("#SearchInfo1_ACSLabel_SearchResultCount");
-    if (!rowCountEl) {
-      throw new Error("TODO");
-    }
-    const rows = await rowCountEl.evaluate((el: HTMLInputElement) =>
-      parseInt(el.innerText),
-    );
     const headers = [
       [
         "Doc #",
-        "File Date",
+        "Rec Date",
         "Rec Time",
         "Type Desc.",
-        "Bk/Pg",
+        "# of Pages",
+        "Book/Page",
         "Consideration",
         "Court Case #",
-        "Doc. Status",
       ],
     ];
     const data = [];
 
-    for (let i = 0; i < rows; i++) {
-      const fn = `DocList1$GridView_Document$ctl${(i + 2)
+    for (let i = 0; i < count; i++) {
+      const fn = `DocList1$GridView_Document$ctl${((i % 20) + 2)
         .toString()
-        .padStart(2, "0")}$ButtonRow_Rec. Date_${i}`;
+        .padStart(2, "0")}$ButtonRow_Rec. Date_${i % 20}`;
+
       await page.evaluate((fn) => {
         return __doPostBack(fn, "");
       }, fn);
-
-      await Bun.sleep(1000);
 
       const details = await page.waitForSelector("#DocDetails1_Panel_Details");
       if (!details) {
@@ -94,11 +57,22 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
         tds.map((td) => td.evaluate((el: HTMLInputElement) => el.innerText)),
       );
       data.push(values);
+
+      await Bun.sleep(1000);
+      if (i % 20 === 0) {
+        await screenshot.record(page, `after-${i}`);
+      }
+
+      if (i % 20 === 19 && i < count - 1) {
+        await page.click("#DocList1_LinkButtonNext");
+        await Bun.sleep(3000);
+      }
     }
 
     const output = stringify(headers.concat(data));
     return output;
   } catch (err) {
+    console.log(err);
     await screenshot.record(page, "error-received");
     throw err;
   } finally {
@@ -107,8 +81,8 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 };
 
 if (import.meta.main) {
-  const start = dayjs("2023-01-01");
-  const end = dayjs("2023-10-31");
+  const start = dayjs("2023-11-20");
+  const end = dayjs("2023-11-21");
   main(start, end)
     .then((output) => {
       console.log(output);

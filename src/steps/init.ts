@@ -7,8 +7,6 @@ import { rimraf } from "rimraf";
 
 import { log } from "../core";
 
-puppeteer.use(StealthPlugin());
-
 export const init = async (
   attempt: number,
 ): Promise<{ page: Page; browser: Browser }> => {
@@ -26,12 +24,17 @@ export const init = async (
   }
 
   log.info("Launching puppeteer headless browser.");
+  puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: process.env.HEADLESS === "false" ? false : "new",
   });
 
   log.debug("Creating a new page.");
   const page = await browser.newPage();
+
+  await page.setUserAgent(
+    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0",
+  );
 
   log.debug("Setting screen size to 1080 x 1024.");
   await page.setViewport({ width: 1080, height: 1024 });

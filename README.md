@@ -17,4 +17,3 @@ This project was created using `bun init` in bun v1.0.11. [Bun](https://bun.sh) 
 Roadmap
 
 - [ ] retries
-- [ ] change to 'real' deeds
