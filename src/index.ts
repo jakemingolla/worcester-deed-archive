@@ -65,6 +65,7 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 
       if (i % 20 === 19 && i < count - 1) {
         await page.click("#DocList1_LinkButtonNext");
+        await page.waitForNetworkIdle();
         await Bun.sleep(3000);
       }
     }
