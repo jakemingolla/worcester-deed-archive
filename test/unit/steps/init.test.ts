@@ -12,7 +12,7 @@ jest.mock("rimraf", () => {
   return { rimraf: mockRimraf };
 });
 
-const mockPage = { setViewport: jest.fn() };
+const mockPage = { setViewport: jest.fn(), setUserAgent: jest.fn() };
 
 const mockBrowser = {
   newPage: jest.fn().mockResolvedValue(mockPage),
@@ -69,6 +69,10 @@ describe("steps/init", () => {
       width: 1080,
       height: 1024,
     });
+
+    expect(mockPage.setUserAgent).not.toHaveBeenCalledWith(
+      expect.stringContaining("Headless"),
+    );
 
     expect(browser).toMatchObject(mockBrowser);
     expect(page).toMatchObject(mockPage);
