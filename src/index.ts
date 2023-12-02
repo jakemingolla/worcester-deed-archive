@@ -56,7 +56,7 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
       const values = await Promise.all(
         tds.map((td) => td.evaluate((el: HTMLInputElement) => el.innerText)),
       );
-      data.push(values);
+      data.push(values.map((value) => value.replace("\u00a0", "")));
 
       await Bun.sleep(1000);
       if (i % 20 === 0) {
