@@ -7,6 +7,11 @@ describe("happy path tests", () => {
     const start = dayjs("1961-01-06");
     const end = dayjs("1961-01-07");
     const output = await main(start, end);
+    expect(output.split("\n").length).toBe(
+      27 + // data
+        1 + // header
+        1, // last line
+    );
     expect(output).toMatchSnapshot();
   });
 

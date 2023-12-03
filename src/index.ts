@@ -47,6 +47,7 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
       await page.evaluate((fn) => {
         return __doPostBack(fn, "");
       }, fn);
+      await Bun.sleep(1000);
 
       const details = await page.waitForSelector("#DocDetails1_Panel_Details");
       if (!details) {
@@ -58,16 +59,15 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
       );
       data.push(values.map((value) => value.replace("\u00a0", "")));
 
-      await Bun.sleep(1000);
-      if (i % 20 === 0) {
+      if (i % 20 === 0 || i % 20 === 19) {
         await screenshot.record(page, `after-${i}`);
       }
 
-      if (i % 20 === 19 && i < count - 1) {
+      if (i % 20 === 19) {
         await page.click("#DocList1_LinkButtonNext");
-        await page.waitForNetworkIdle();
         await Bun.sleep(3000);
       }
+      log.debug(`Successfully processed i = ${i} of ${count} results.`);
     }
 
     const output = stringify(headers.concat(data));

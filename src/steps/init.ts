@@ -13,7 +13,7 @@ export const init = async (
   try {
     log.debug("Attempting to reset the ./screenshots directory.");
     await access("./screenshots");
-    if (attempt === 1) {
+    if (attempt === 1 && process.env.CLEAR_SCREENSHOTS !== "false") {
       log.debug("Removing all *.png files in the ./screenshots directory.");
       await rimraf(path.join("./screenshots", "*.png"), { glob: true });
     }
