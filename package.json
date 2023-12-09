@@ -27,7 +27,7 @@
   },
   "scripts": {
     "postinstall": "bun run postinstall1 && bun run postinstall2",
-    "postinstall1": "bunx @puppeteer/browsers install chrome@stable --path $HOME/.cache/puppeteer",
+    "postinstall1": "bunx @puppeteer/browsers install chrome@119.0.6045.105 --path $HOME/.cache/puppeteer",
     "postinstall1-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
     "postinstall2": "mkdir -p ./screenshots",
     "start": "bun run src/index.ts",
