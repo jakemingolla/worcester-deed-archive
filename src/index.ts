@@ -3,6 +3,8 @@ import dayjs, { type Dayjs } from "dayjs";
 
 import { log, screenshot } from "./core/index.ts";
 import { countResults } from "./steps/count-results.ts";
+import { getRow } from "./steps/get-row.ts";
+import { goToNextPage } from "./steps/go-to-next-page.ts";
 import { init } from "./steps/init.ts";
 import { setSearchCriteria } from "./steps/set-search-criteria.ts";
 
@@ -27,6 +29,7 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 
     const headers = [
       [
+        // General details
         "Doc #",
         "Rec Date",
         "Rec Time",
@@ -35,10 +38,16 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
         "Book/Page",
         "Consideration",
         "Court Case #",
+        // Property details
+        "Street #",
+        "Street Name",
+        "Description",
+        // TODO grantees?
       ],
     ];
     const data = [];
 
+    // TODO config page size
     for (let i = 0; i < count; i++) {
       const fn = `DocList1$GridView_Document$ctl${((i % 20) + 2)
         .toString()
@@ -47,31 +56,22 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
       await page.evaluate((fn) => {
         return __doPostBack(fn, "");
       }, fn);
+      // TODO config
       await Bun.sleep(1000);
 
-      const details = await page.waitForSelector("#DocDetails1_Panel_Details");
-      if (!details) {
-        throw new Error("TODO");
-      }
-      const tds = await details.$$("td");
-      const values = await Promise.all(
-        tds.map((td) => td.evaluate((el: HTMLInputElement) => el.innerText)),
-      );
-      data.push(values.map((value) => value.replace("\u00a0", "")));
+      data.push(await getRow(page));
 
       if (i % 20 === 0 || i % 20 === 19) {
         await screenshot.record(page, `after-${i}`);
       }
 
-      if (i % 20 === 19) {
-        await page.click("#DocList1_LinkButtonNext");
-        await Bun.sleep(3000);
+      if (i % 20 === 19 && i + 1 < count) {
+        await goToNextPage(page, i);
       }
       log.debug(`Successfully processed i = ${i} of ${count} results.`);
     }
 
-    const output = stringify(headers.concat(data));
-    return output;
+    return stringify(headers.concat(data));
   } catch (err) {
     console.log(err);
     await screenshot.record(page, "error-received");
