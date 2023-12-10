@@ -27,10 +27,11 @@
     "ts-jest-mock-import-meta": "^1.1.0"
   },
   "scripts": {
-    "postinstall": "bun run postinstall1 && bun run postinstall2",
+    "postinstall": "bun run postinstall1 && bun run postinstall2 && bun run postinstall3",
     "postinstall1": "bunx @puppeteer/browsers install chrome@119.0.6045.105 --path $HOME/.cache/puppeteer",
     "postinstall1-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
     "postinstall2": "mkdir -p ./screenshots",
+    "postinstall3": "cp .env.development .env",
     "start": "bun run src/index.ts",
     "test": "bun run lint && bun run test:unit && bun run test:integration",
     "test:unit": "jest",
