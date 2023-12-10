@@ -28,7 +28,7 @@ jobs:
       - run: bun run start
       - uses: actions/upload-artifact@v3
         with:
-          name: results-${{ inputs.START_DATE }}_to_${{ inputs.END_DATE }}.csv
+          name: Results (${{ inputs.START_DATE }} to ${{ inputs.END_DATE }})
           path: results.csv
           retention-days: 14
       - uses: actions/upload-artifact@v3
