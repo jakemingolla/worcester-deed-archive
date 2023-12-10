@@ -6,11 +6,11 @@ on:
       start:
         required: true
         type: string
-        description: 'Start of time range in in ISO-8601 format'
+        description: 'Start time (YYYY-MM-DD format)'
       end:  
         required: true
         type: string
-        description: 'End of time range in in ISO-8601 format'
+        description: 'End time (YYYY-MM-DD format)'
 
 jobs:
   manual-run:
