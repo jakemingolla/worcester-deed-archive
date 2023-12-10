@@ -5,7 +5,7 @@ on:
       START_DATE:
         description: 'Start of time range in in ISO-8601 format'
         required: true
-      START_DATE:
+      END_DATE:
         description: 'End of time range in in ISO-8601 format'
         required: true
 jobs:
