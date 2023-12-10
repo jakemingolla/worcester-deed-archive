@@ -99,8 +99,9 @@ if (import.meta.main) {
   main(config.START_DATE, config.END_DATE)
     .then((output) => {
       console.log(output);
-      process.exit(0);
+      return Bun.write(config.OUTPUT_FILE, output);
     })
+    .then(() => process.exit(0))
     .catch((err) => {
       log.error((err as Error).stack);
       return process.exit(1);

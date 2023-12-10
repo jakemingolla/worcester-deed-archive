@@ -10,6 +10,7 @@ const schema = {
   END_DATE: String, // ISO 8601
   HEADLESS: Boolean,
   LOG_LEVEL: String,
+  OUTPUT_FILE: String,
   START_DATE: String, // ISO 8601
   USER_AGENT: String,
 };
