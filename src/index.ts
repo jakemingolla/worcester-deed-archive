@@ -1,20 +1,28 @@
 import { stringify } from "csv-stringify/sync";
-import dayjs, { type Dayjs } from "dayjs";
 
-import { log, screenshot } from "./core/index.ts";
+import { config, log, screenshot } from "./core/index.ts";
 import { countResults } from "./steps/count-results.ts";
 import { getRow } from "./steps/get-row.ts";
 import { goToNextPage } from "./steps/go-to-next-page.ts";
 import { init } from "./steps/init.ts";
 import { setSearchCriteria } from "./steps/set-search-criteria.ts";
+import { validateTimeRange } from "./steps/validate-time-range.ts";
 
-export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
-  log.info(`Beginning run from ${start.format()} -> ${end.format()}.`);
+export const main = async (
+  startInput: string,
+  endInput: string,
+): Promise<string> => {
+  const { start, end } = validateTimeRange(startInput, endInput);
+  log.info(
+    `Beginning run at ${
+      config.BASE_URL
+    } from ${start.format()} -> ${end.format()}.`,
+  );
 
   const { browser, page } = await init(1);
 
   try {
-    await page.goto("https://www.masslandrecords.com/worcester/");
+    await page.goto(config.BASE_URL);
 
     await page.waitForFunction(() => typeof __doPostBack !== "undefined");
     await screenshot.record(page, "after-do-post-back");
@@ -62,9 +70,9 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
       await page.waitForXPath(
         `//*[@id="${id}"]/ancestor::tr[@class="DataGridSelectedRow"]`,
       );
-      // TODO config extra sleep?
 
       data.push(await getRow(page));
+      await Bun.sleep(config.AFTER_EACH_ROW_DELAY_SECONDS * 1000);
 
       if (i % 20 === 0 || i % 20 === 19) {
         await screenshot.record(page, `after-${i}`);
@@ -72,8 +80,7 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 
       if (i % 20 === 19 && i + 1 < count) {
         await goToNextPage(page, i);
-        await Bun.sleep(5 * 1000);
-        // TODO config extra sleep?
+        await Bun.sleep(config.AFTER_EACH_PAGE_DELAY_SECONDS * 1000);
       }
       log.debug(`Successfully processed i = ${i} of ${count} results.`);
     }
@@ -89,13 +96,12 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 };
 
 if (import.meta.main) {
-  const start = dayjs("2023-11-20");
-  const end = dayjs("2023-11-21");
-  main(start, end)
+  main(config.START_DATE, config.END_DATE)
     .then((output) => {
       console.log(output);
-      process.exit(0);
+      return Bun.write(config.OUTPUT_FILE, output);
     })
+    .then(() => process.exit(0))
     .catch((err) => {
       log.error((err as Error).stack);
       return process.exit(1);

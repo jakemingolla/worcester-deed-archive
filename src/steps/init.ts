@@ -5,7 +5,7 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { rimraf } from "rimraf";
 
-import { log } from "../core";
+import { config, log } from "../core";
 
 export const init = async (
   attempt: number,
@@ -13,7 +13,7 @@ export const init = async (
   try {
     log.debug("Attempting to reset the ./screenshots directory.");
     await access("./screenshots");
-    if (attempt === 1 && process.env.CLEAR_SCREENSHOTS !== "false") {
+    if (attempt === 1 && config.CLEAR_SCREENSHOTS) {
       log.debug("Removing all *.png files in the ./screenshots directory.");
       await rimraf(path.join("./screenshots", "*.png"), { glob: true });
     }
@@ -23,10 +23,10 @@ export const init = async (
     await mkdir("./screenshots");
   }
 
-  log.info("Launching puppeteer headless browser.");
+  log.info(`Launching puppeteer browser with HEADLESS=${config.HEADLESS}.`);
   puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
-    headless: process.env.HEADLESS === "false" ? false : "new",
+    headless: config.HEADLESS ? "new" : false,
   });
 
   log.debug("Creating a new page.");

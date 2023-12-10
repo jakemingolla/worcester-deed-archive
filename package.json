@@ -8,6 +8,7 @@
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "rimraf": "^5.0.5",
+    "ts-dotenv": "^0.9.1",
     "typescript": "^5.2.2",
     "winston": "^3.11.0"
   },
@@ -26,15 +27,16 @@
     "ts-jest-mock-import-meta": "^1.1.0"
   },
   "scripts": {
-    "postinstall": "bun run postinstall1 && bun run postinstall2",
+    "postinstall": "bun run postinstall1 && bun run postinstall2 && bun run postinstall3",
     "postinstall1": "bunx @puppeteer/browsers install chrome@119.0.6045.105 --path $HOME/.cache/puppeteer",
     "postinstall1-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
     "postinstall2": "mkdir -p ./screenshots",
+    "postinstall3": "cp .env.development .env",
     "start": "bun run src/index.ts",
     "test": "bun run lint && bun run test:unit && bun run test:integration",
     "test:unit": "jest",
-    "test:integration": "CLEAR_SCREENSHOTS=false bun test --timeout 60000 -- test/integration",
-    "test:integration:update-snapshots": "CLEAR_SCREENSHOTS=false bun test --timeout 60000 --update-snapshots -- test/integration",
+    "test:integration": "CLEAR_SCREENSHOTS=false HEADLESS=true bun test --timeout 60000 -- test/integration",
+    "test:integration:update-snapshots": "CLEAR_SCREENSHOTS=false HEADLESS=true bun test --timeout 60000 --update-snapshots -- test/integration",
     "lint": "bun run typescript:check && bun run eslint:check && bun run prettier:check",
     "typescript:check": "tsc --noEmit",
     "eslint:check": "eslint . --max-warnings 0 --ext .ts",

@@ -1,0 +1,39 @@
+name: Run
+on:
+  workflow_call:
+    inputs:
+      START_DATE:
+        type: string
+        description: 'Start of time range in in ISO-8601 format'
+        required: true
+      END_DATE:
+        type: string
+        description: 'End of time range in in ISO-8601 format'
+        required: true
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      START_DATE: ${{ inputs.START_DATE }}
+      END_DATE: ${{ inputs.END_DATE }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.0.11
+      - run: bun install
+      - run: bun run start
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Results
+          path: results.csv
+          retention-days: 14
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Screenshots
+          path: ./screenshots
+          retention-days: 14

@@ -1,0 +1,20 @@
+name: Manual run
+
+on:
+  workflow_dispatch:
+    inputs:
+      start:
+        required: true
+        type: string
+        description: 'Start of time range in in ISO-8601 format'
+      end:  
+        required: true
+        type: string
+        description: 'End of time range in in ISO-8601 format'
+
+jobs:
+  manual-run:
+    uses: ./.github/workflows/run.yaml
+    with:
+      START_DATE: ${{ inputs.start }}
+      END_DATE: ${{ inputs.end }}
