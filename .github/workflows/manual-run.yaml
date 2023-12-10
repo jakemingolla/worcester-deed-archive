@@ -1,4 +1,5 @@
 name: Manual run
+run-name: Archive ${{ inputs.start }} to ${{ inputs.end }}
 
 on:
   workflow_dispatch:
