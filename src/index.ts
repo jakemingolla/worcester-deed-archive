@@ -52,12 +52,17 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
       const fn = `DocList1$GridView_Document$ctl${((i % 20) + 2)
         .toString()
         .padStart(2, "0")}$ButtonRow_Rec. Date_${i % 20}`;
-
       await page.evaluate((fn) => {
         return __doPostBack(fn, "");
       }, fn);
-      // TODO config
-      await Bun.sleep(1000);
+
+      const id = `DocList1_GridView_Document_ctl${((i % 20) + 2)
+        .toString()
+        .padStart(2, "0")}_ButtonRow_Rec. Date_${i % 20}`;
+      await page.waitForXPath(
+        `//*[@id="${id}"]/ancestor::tr[@class="DataGridSelectedRow"]`,
+      );
+      // TODO config extra sleep?
 
       data.push(await getRow(page));
 
@@ -67,6 +72,8 @@ export const main = async (start: Dayjs, end: Dayjs): Promise<string> => {
 
       if (i % 20 === 19 && i + 1 < count) {
         await goToNextPage(page, i);
+        await Bun.sleep(5 * 1000);
+        // TODO config extra sleep?
       }
       log.debug(`Successfully processed i = ${i} of ${count} results.`);
     }
