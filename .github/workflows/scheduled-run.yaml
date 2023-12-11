@@ -18,8 +18,8 @@ jobs:
         run: |
           start_date=$(date -d "last monday" -I)
           end_date=$(date -d "last sunday" -I)
-          echo $start_date
-          echo $end_date
+          echo "$start_date"
+          echo "$end_date"
           echo "start-date=$start_date" >> "$GITHUB_OUTPUT"
           echo "end-date=$end_date" >> "$GITHUB_OUTPUT"
 
