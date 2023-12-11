@@ -17,7 +17,8 @@ const getDocumentData = async (page: Page): Promise<string[]> => {
   for (let i = data.length; i < 8; i++) {
     data.push("");
   }
-  return data;
+
+  return data.slice(0, 8);
 };
 
 const getPropertyData = async (page: Page): Promise<string[]> => {
@@ -25,7 +26,9 @@ const getPropertyData = async (page: Page): Promise<string[]> => {
   for (let i = data.length; i < 3; i++) {
     data.push("");
   }
-  return data;
+
+  // TODO How to handle multiple addresses?
+  return data.slice(0, 3);
 };
 
 export const getRow = async (page: Page): Promise<string[]> => {
