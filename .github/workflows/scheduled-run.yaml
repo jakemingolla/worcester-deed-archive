@@ -1,10 +1,10 @@
 name: Weekly Archive
 
-on: workflow_dispatch
-  # schedule:
-  #   # Every 9 am UTC (4 am eastern) on Monday
-  #   # https://crontab.guru/#0_9_*_*_MON
-  #   - cron: "0 9 * * MON"
+on:
+  schedule:
+    # Every 9 am UTC (4 am eastern) on Monday
+    # https://crontab.guru/#0_9_*_*_MON
+    - cron: "0 9 * * MON"
 
 jobs:
   get-time-range:
@@ -18,6 +18,8 @@ jobs:
         run: |
           start_date=$(date -d "last monday" -I)
           end_date=$(date -d "last sunday" -I)
+          echo "$start_date"
+          echo "$end_date"
           echo "start-date=$start_date" >> "$GITHUB_OUTPUT"
           echo "end-date=$end_date" >> "$GITHUB_OUTPUT"
 
