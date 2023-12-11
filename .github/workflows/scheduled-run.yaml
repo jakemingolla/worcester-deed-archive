@@ -1,0 +1,30 @@
+name: Weekly Archive
+
+on: workflow_dispatch
+  # schedule:
+  #   # Every 9 am UTC (4 am eastern) on Monday
+  #   # https://crontab.guru/#0_9_*_*_MON
+  #   - cron: "0 9 * * MON"
+
+jobs:
+  get-time-range:
+    runs-on: ubuntu-latest
+    outputs:
+      start-date: ${{ steps.get-time-range.outputs.start-date }}
+      end-date: ${{ steps.get-time-range.outputs.end-date }}
+    steps:
+      - name: Get time range
+        id: get-time-range
+        run: |
+          start_date=$(date -d "last monday" -I)
+          end_date=$(date -d "last sunday" -I)
+          echo "start-date=$start_date" >> "$GITHUB_OUTPUT"
+          echo "end-date=$end_date" >> "$GITHUB_OUTPUT"
+
+  scheduled-run:
+    needs:
+      - get-time-range
+    uses: ./.github/workflows/run.yaml
+    with:
+      START_DATE: ${{ needs.get-time-range.outputs.start-date }}
+      END_DATE: ${{ needs.get-time-range.outputs.end-date }}
