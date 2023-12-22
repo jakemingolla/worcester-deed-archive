@@ -50,10 +50,14 @@ export const main = async (
         "Street #",
         "Street Name",
         "Description",
-        // TODO grantees?
+        // Town details
+        "Town",
+        // Grant details
+        "Grantor",
+        "Grantee",
       ],
     ];
-    const data = [];
+    const data: string[][] = [];
 
     // TODO config page size
     for (let i = 0; i < count; i++) {
@@ -71,7 +75,7 @@ export const main = async (
         `//*[@id="${id}"]/ancestor::tr[@class="DataGridSelectedRow"]`,
       );
 
-      data.push(await getRow(page));
+      data.push(await getRow(page, i));
       await Bun.sleep(config.AFTER_EACH_ROW_DELAY_SECONDS * 1000);
 
       if (i % 20 === 0 || i % 20 === 19) {

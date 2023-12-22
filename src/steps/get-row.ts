@@ -27,14 +27,38 @@ const getPropertyData = async (page: Page): Promise<string[]> => {
     data.push("");
   }
 
-  // TODO How to handle multiple addresses?
+  // Multiple addresses are ignored, only the first are taken
   return data.slice(0, 3);
 };
 
-export const getRow = async (page: Page): Promise<string[]> => {
+const getTownData = async (page: Page, i: number): Promise<string[]> => {
+  const towns = await page.$x(`//a[contains(@id, "ButtonRow_Town")]`);
+  const town = towns.at(i % 20);
+  const innerText = await town?.getProperty("innerText");
+  return [(await innerText?.jsonValue()) as string];
+};
+
+const getGrantData = async (page: Page): Promise<string[]> => {
+  const data = await getCellDataForPanel(
+    "#DocDetails1_Panel_GrantorGrantee",
+    page,
+  );
+
+  const names = data.filter((_, i) => i % 2 === 0);
+  const roles = data.filter((_, i) => i % 2 === 1);
+
+  const grantorIndex = roles.findIndex((role) => role === "Grantor");
+  const granteeIndex = roles.findIndex((role) => role === "Grantee");
+
+  return [names.at(grantorIndex) || "", names.at(granteeIndex) || ""];
+};
+
+export const getRow = async (page: Page, i: number): Promise<string[]> => {
   return [
     // pretter-ignore-next-line
     ...(await getDocumentData(page)),
     ...(await getPropertyData(page)),
+    ...(await getTownData(page, i)),
+    ...(await getGrantData(page)),
   ];
 };
