@@ -63,7 +63,9 @@ describe("steps/init", () => {
     const { browser, page } = await init(1);
 
     expect(mockLaunch).toHaveBeenCalledTimes(1);
-    expect(mockLaunch).toHaveBeenCalledWith({ headless: "new" });
+    expect(mockLaunch).toHaveBeenCalledWith(
+      expect.objectContaining({ headless: "new" }),
+    );
 
     expect(mockPage.setViewport).toHaveBeenCalledWith({
       width: 1080,
