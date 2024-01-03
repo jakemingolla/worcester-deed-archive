@@ -13,6 +13,7 @@ const schema = {
   OUTPUT_FILE: String,
   START_DATE: String, // ISO 8601
   USER_AGENT: String,
+  PUPPETEER_TIMEOUT_SECONDS: Number,
 };
 
 export const config = load(schema);

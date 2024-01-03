@@ -27,6 +27,7 @@ export const init = async (
   puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
     headless: config.HEADLESS ? "new" : false,
+    timeout: config.PUPPETEER_TIMEOUT_SECONDS * 1000,
   });
 
   log.debug("Creating a new page.");
