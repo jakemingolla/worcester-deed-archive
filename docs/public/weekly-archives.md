@@ -27,7 +27,7 @@ archive in CSV format.
 2. Navigate to the most recent row in the list by clicking it:
 
 <div align="center">
-  <img src="../static/weekly-archive-green.png">
+  <img width=500 src="../static/weekly-archive-green.png">
 </div>
 
 > [!NOTE]
@@ -38,14 +38,14 @@ archive in CSV format.
 > this repository. There will not be a CSV generated for this week. 3.
 
 <div align="center">
-  <img src="../static/weekly-archive-red.png">
+  <img width=500 src="../static/weekly-archive-red.png">
 </div>
 
 3. You will see an overview of the job. Clicking the link highlighted below in
    red to begin downloading the CSV archive of the deeds:
 
 <div align="center">
-  <img src="../static/finished-scheduled-run.png">
+  <img width=500 src="../static/finished-scheduled-run.png">
 </div>
 
 4. Depending on your browser, the download might compressed as a `.zip` file.

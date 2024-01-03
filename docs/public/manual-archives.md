@@ -23,7 +23,7 @@ https://www.masslandrecords.com/worcester/ between two dates in CSV format.
    10th, 2024.
 
 <div align="center">
-  <img src="../static/start-manual-run.png">
+  <img width=500 src="../static/start-manual-run.png">
 </div>
 
 3. Press the green `Run workflow` button.
@@ -32,14 +32,14 @@ https://www.masslandrecords.com/worcester/ between two dates in CSV format.
    yellow spinner while it is in progress.
 
 <div align="center">
-  <img src="../static/manual-run-yellow.png">
+  <img width=500 src="../static/manual-run-yellow.png">
 </div>
 
 5. Come back in 5 - 10 minutes and the yellow spinner will be replaced by a
    green checkmark. Click the name of the run to view the CSV results:
 
 <div align="center">
-  <img src="../static/manual-run-green.png">
+  <img width=500 src="../static/manual-run-green.png">
 </div>
 
 > [!CAUTION]
@@ -49,7 +49,7 @@ https://www.masslandrecords.com/worcester/ between two dates in CSV format.
 6. In the `Artifacts` section, click the file starting with `Results`:
 
 <div align="center">
-  <img src="../static/finished-manual-run.png">
+  <img width=500 src="../static/finished-manual-run.png">
 </div>
 
 7. Depending on your browser, the download might compressed as a `.zip` file.
