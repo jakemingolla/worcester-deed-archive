@@ -13,6 +13,8 @@ archive in CSV format.
   `Actions` tab
 - You can open and view `.csv` files using a program like Microsoft Excel or
   Apple Numbers
+- You can decompress `.zip` files using a program like
+  [7zip](https://www.7-zip.org/) or a built-in utility
 
 ## Instructions
 
@@ -25,7 +27,7 @@ archive in CSV format.
 2. Navigate to the most recent row in the list by clicking it:
 
 <div align="center">
-![](../static/weekly-archive-1.png)
+  <img src="../static/weekly-archive-green.png">
 </div>
 
 > [!NOTE]
@@ -34,3 +36,19 @@ archive in CSV format.
 > [!CAUTION]
 > If a row has a red font with an X as its logo, contact an administrator of
 > this repository. There will not be a CSV generated for this week. 3.
+
+<div align="center">
+  <img src="../static/weekly-archive-red.png">
+</div>
+
+3. You will see an overview of the job. Clicking the link highlighted below in
+   red to begin downloading the CSV archive of the deeds:
+
+<div align="center">
+  <img src="../static/finished-scheduled-run.png">
+</div>
+
+4. Depending on your browser, the download might compressed as a `.zip` file.
+   You may need to decompress it it in order to view the CSV results.
+
+5. Open the resulting `.csv` file in your CSV viewing application
