@@ -33,9 +33,7 @@ export const init = async (
   log.debug("Creating a new page.");
   const page = await browser.newPage();
 
-  await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0",
-  );
+  await page.setUserAgent(config.USER_AGENT);
 
   log.debug("Setting screen size to 1080 x 1024.");
   await page.setViewport({ width: 1080, height: 1024 });
