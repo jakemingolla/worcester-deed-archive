@@ -27,12 +27,12 @@ jobs:
       - run: curl --silent https://api.ipify.org
       - run: bun install
       - run: bun run start
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Results (${{ inputs.START_DATE }} to ${{ inputs.END_DATE }})
           path: results.csv
           retention-days: 14
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Screenshots
