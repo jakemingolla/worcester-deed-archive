@@ -28,6 +28,7 @@ export const init = async (
   const browser = await puppeteer.launch({
     headless: config.HEADLESS ? "new" : false,
     timeout: config.PUPPETEER_TIMEOUT_SECONDS * 1000,
+    args: ["--no-sandbox"],
   });
 
   log.debug("Creating a new page.");
