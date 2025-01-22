@@ -29,7 +29,7 @@ export const init = async (
     headless: config.HEADLESS ? "new" : false,
     timeout: config.PUPPETEER_TIMEOUT_SECONDS * 1000,
     args: [
-      "--no-sandbox"
+      "--no-sandbox",
     ],
   });
 
