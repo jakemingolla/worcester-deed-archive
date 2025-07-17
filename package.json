@@ -27,6 +27,8 @@
     "ts-jest-mock-import-meta": "^1.1.0"
   },
   "scripts": {
+    "preinstall": "export PUPPETEER_SKIP_DOWNLOAD=true && export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true",
+    "preinstall-source": "https://github.com/oven-sh/bun/issues/17456",
     "postinstall": "bun run postinstall1 && bun run postinstall2 && bun run postinstall3",
     "postinstall1": "bunx @puppeteer/browsers install chrome@119.0.6045.105 --path $HOME/.cache/puppeteer",
     "postinstall1-source": "open https://github.com/oven-sh/bun/issues/4705#issuecomment-1712545662",
